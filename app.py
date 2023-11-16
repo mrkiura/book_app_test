@@ -3,6 +3,8 @@ from storage import BookStorage
 from book_factory import test_books
 from auth import login_required, STATIC_TOKEN, TokenMiddleware
 from rizz_wsgi.response import Response
+from rizz_wsgi.request import Request
+
 
 app = API()
 book_storage = BookStorage()
@@ -29,3 +31,9 @@ def create_book(request, response: Response):
 
     response.status_code = 201
     response.json = book._asdict()
+
+
+@app.route("/books/{id:d}", allowed_methods=["delete"])
+@login_required
+def delete_book(request, response, id):
+    book_storage.delete(id)
