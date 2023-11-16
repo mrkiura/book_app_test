@@ -1,10 +1,11 @@
 from rizz_wsgi.api import API
 from storage import BookStorage
+from book_factory import test_books
 
 
 app = API()
 book_storage = BookStorage()
-book_storage.create(name="Mastery", author="Robert Greene")
+book_storage.bulk_create(test_books)
 
 
 @app.route("/", allowed_methods=["get"])
