@@ -37,3 +37,4 @@ def create_book(request: Request, response: Response):
 @login_required
 def delete_book(request: Request, response: Response, id: str):
     book_storage.delete(id)
+    response.status_code = 204
