@@ -1,5 +1,8 @@
 import re
+
 from rizz_wsgi.middleware import Middleware
+from rizz_wsgi.request import Request
+from rizz_wsgi.response import Response
 
 
 STATIC_TOKEN = "6cc37289cff1440f95363c43388d91b4"
@@ -28,3 +31,13 @@ def login_required(handler):
 
         return handler(request, response, *args, **kwargs)
     return wrapped_view
+
+
+def on_exception(
+        request: Request,
+        response: Response,
+        exception: Exception | InvalidTokenException
+):
+    if isinstance(exception, InvalidTokenException):
+        response.text = "Token is invalid"
+        response.status_code = 401

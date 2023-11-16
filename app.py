@@ -1,7 +1,7 @@
 from rizz_wsgi.api import API
 from storage import BookStorage
 from book_factory import test_books
-from auth import login_required, STATIC_TOKEN, TokenMiddleware
+from auth import login_required, STATIC_TOKEN, TokenMiddleware, on_exception
 from rizz_wsgi.response import Response
 from rizz_wsgi.request import Request
 
@@ -11,6 +11,7 @@ book_storage = BookStorage()
 book_storage.bulk_create(test_books)
 
 app.add_middleware(TokenMiddleware)
+app.add_exception_handler(on_exception)
 
 
 @app.route("/", allowed_methods=["get"])
