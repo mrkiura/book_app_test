@@ -13,3 +13,18 @@ class TokenMiddleware(Middleware):
         match = self._regex.match(header)
         token = match and match.group(1) or None
         request.token = token
+
+
+class InvalidTokenException(Exception):
+    pass
+
+
+def login_required(handler):
+    def wrapped_view(request, response, *args, **kwargs):
+        token = getattr(request, "token", None)
+
+        if token is None or not token == STATIC_TOKEN:
+            raise InvalidTokenException("Invalid Token")
+
+        return handler(request, response, *args, **kwargs)
+    return wrapped_view
