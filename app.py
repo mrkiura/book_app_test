@@ -14,19 +14,19 @@ app.add_middleware(TokenMiddleware)
 
 
 @app.route("/", allowed_methods=["get"])
-def index(request, response):
+def index(request: Request, response: Response):
     books = book_storage.all()
     response.html = app.template("index.html", context={"books": books})
 
 
 @app.route("/login", allowed_methods=["post"])
-def login(request, response):
+def login(request: Request, response: Response):
     response.json = {"token": STATIC_TOKEN}
 
 
 @app.route("/books", allowed_methods=["post"])
 @login_required
-def create_book(request, response: Response):
+def create_book(request: Request, response: Response):
     book = book_storage.create(**request.POST)
 
     response.status_code = 201
@@ -35,5 +35,5 @@ def create_book(request, response: Response):
 
 @app.route("/books/{id:d}", allowed_methods=["delete"])
 @login_required
-def delete_book(request, response, id):
+def delete_book(request: Request, response: Response, id: str):
     book_storage.delete(id)
