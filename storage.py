@@ -1,5 +1,5 @@
 from models import Book
-from typing import Union
+from typing import Union, List
 
 
 class BookStorage:
@@ -24,6 +24,10 @@ class BookStorage:
         book = Book(**kwargs)
         self._books.append(book)
         return book
+
+    def bulk_create(self, books: List[dict[str, str]]) -> List[Book]:
+        books = [self.create(**book) for book in books]
+        return books
 
     def delete(self, id) -> None:
         for index, book in enumerate(self._books):
